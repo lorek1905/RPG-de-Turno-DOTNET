@@ -1,0 +1,7 @@
+Sistema ==
+
+1 crie seu personagem
+
+2 batalha por turnos com inimigos
+
+3 conta quantos rouds// batalhas sobreviveu
