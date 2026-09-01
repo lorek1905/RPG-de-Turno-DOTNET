@@ -98,6 +98,14 @@ public class Program
             inimigo.Vida -= dano;
         }
 
+        Console.WriteLine();
+        Console.WriteLine($"Dano causado: {dano}");
+        Console.WriteLine();
+        MostrarPersonagem(personagem);
+        Console.WriteLine();
+        MostrarPersonagem(inimigo);
+        Console.WriteLine();
+
         return dano;
     }
 
@@ -131,14 +139,7 @@ public class Program
                 switch (escolha) //decisão do personagem
                 {
                     case 1:
-                        int dano = Ataque(personagem, inimigo);
-                        Console.WriteLine();
-                        Console.WriteLine($"Dano causado: {dano}");
-                        Console.WriteLine();
-                        MostrarPersonagem(personagem);
-                        Console.WriteLine();
-                        MostrarPersonagem(inimigo);
-                        Console.WriteLine();
+                        Ataque(personagem, inimigo);
                         break;
                     case 2:
                         Defesa(personagem, inimigo, dano: 1); //deixa o dano aqui por enquanto
@@ -151,49 +152,46 @@ public class Program
                         Console.WriteLine("Operação invalida");
                         break;
                 }
+
                 //chama um numero aleatorio de 0 a 2
                 int decisaoInimigo = rdnInimigo.Next(3);
-                switch (decisaoInimigo)
+
+                if (inimigo.Vida > 0)
                 {
-                    case 0:
-                        Console.WriteLine("Seu inimigo ataca!");
-                        Console.WriteLine();
-                        int dano = Ataque(inimigo, personagem);
-                        Console.WriteLine();
-                        Console.WriteLine($"Dano causado: {dano}");
-                        Console.WriteLine();
-                        MostrarPersonagem(personagem);
-                        Console.WriteLine();
-                        MostrarPersonagem(inimigo);
-                        Console.WriteLine();
-                        break;
-                    case 1:
-                        Defesa(inimigo, personagem, dano: 1); //deixa o dano aqui por enquanto
-                        break;
-                    case 2:
-                        Console.WriteLine("Inimigo não consegue fugir");
-                        break;
-                    default:
-                        Console.WriteLine("Operação invalida");
-                        break;
+                    switch (decisaoInimigo)
+                    {
+                        case 0:
+                            Console.WriteLine("Seu inimigo ataca!");
+                            Console.WriteLine();
+                            Ataque(inimigo, personagem);
+                            break;
+                        case 1:
+                            Defesa(inimigo, personagem, dano: 1); //deixa o dano aqui por enquanto
+                            break;
+                        case 2:
+                            Console.WriteLine("Inimigo não consegue fugir");
+                            break;
+                        default:
+                            Console.WriteLine("Operação invalida");
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Você Ganhou!");
                 }
             }
             else if (personagem.Velocidade < inimigo.Velocidade)
             {
                 //chama um numero aleatorio de 0 a 2
                 int decisaoInimigo = rdnInimigo.Next(3);
+
                 switch (decisaoInimigo)
                 {
                     case 0:
                         Console.WriteLine("Seu inimigo ataca!");
                         Console.WriteLine();
-                        int dano = Ataque(inimigo, personagem);
-                        Console.WriteLine();
-                        Console.WriteLine($"Dano causado: {dano}");
-                        Console.WriteLine();
-                        MostrarPersonagem(personagem);
-                        Console.WriteLine();
-                        MostrarPersonagem(inimigo);
+                        Ataque(inimigo, personagem);
                         break;
                     case 1:
                         Defesa(inimigo, personagem, dano: 1); //deixa o dano aqui por enquanto
@@ -206,33 +204,33 @@ public class Program
                         break;
                 }
 
-                switch (escolha)
+                if (personagem.Vida > 0)
                 {
-                    case 1:
-                        int dano = Ataque(personagem, inimigo);
-                        Console.WriteLine();
-                        Console.WriteLine($"Dano causado: {dano}");
-                        Console.WriteLine();
-                        MostrarPersonagem(personagem);
-                        Console.WriteLine();
-                        MostrarPersonagem(inimigo);
-                        Console.WriteLine();
-                        break;
-                    case 2:
-                        Defesa(personagem, inimigo, dano: 1); //deixa o dano aqui por enquanto
-                        break;
-                    case 3:
-                        Console.WriteLine("Você fugiu!");
-                        fugiu = true;
-                        break;
-                    default:
-                        Console.WriteLine("Operação invalida");
-                        break;
+                    switch (escolha)
+                    {
+                        case 1:
+                            Ataque(personagem, inimigo);
+                            break;
+                        case 2:
+                            Defesa(personagem, inimigo, dano: 1); //deixa o dano aqui por enquanto
+                            break;
+                        case 3:
+                            Console.WriteLine("Você não pode fugir!");
+
+                            break;
+                        default:
+                            Console.WriteLine("Operação invalida");
+                            break;
+                    }
                 }
+                else
+                {
+                    Console.WriteLine("Você perdeu!");
+                }
+
             }
 
         }
-
 
     }
 }

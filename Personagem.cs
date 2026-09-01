@@ -19,7 +19,7 @@ public class Personagem
 public class Guerreiro : Personagem
 {
     public Guerreiro(string nome)
-    : base(nome, 100, 100, 100, 100)
+    : base(nome, 180, 40, 40, 20)
     {
 
     }
@@ -28,7 +28,7 @@ public class Guerreiro : Personagem
 public class Mago : Personagem
 {
     public Mago(string nome)
-    : base(nome, 100, 100, 100, 100)
+    : base(nome, 135, 50, 45, 30)
     {
 
     }
@@ -37,7 +37,7 @@ public class Mago : Personagem
 public class Elfo : Personagem
 {
     public Elfo(string nome)
-    : base(nome, 100, 100, 100, 100)
+    : base(nome, 200, 30, 30, 40)
     {
 
     }
@@ -46,7 +46,7 @@ public class Elfo : Personagem
 public class Arqueiro : Personagem
 {
     public Arqueiro(string nome)
-    : base(nome, 100, 100, 100, 100)
+    : base(nome, 140, 50, 30, 40)
     {
 
     }
@@ -55,7 +55,7 @@ public class Arqueiro : Personagem
 public class Goblin : Personagem
 {
     public Goblin(string nome)
-    : base(nome, 100, 100, 100, 100)
+    : base(nome, 120, 30, 20, 30)
     {
 
     }
@@ -64,7 +64,7 @@ public class Goblin : Personagem
 public class Esqueleto : Personagem
 {
     public Esqueleto(string nome)
-    : base(nome, 100, 100, 100, 100)
+    : base(nome, 130, 40, 35, 30)
     {
 
     }
