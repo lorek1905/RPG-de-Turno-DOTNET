@@ -98,7 +98,7 @@ public class Program
         return dano;
     }
 
-    static void acao(int escolha, Personagem personagem, Personagem inimigo, bool defendendo, bool fugiu)
+    static void acao(int escolha, Personagem personagem, Personagem inimigo, ref bool defendendo, ref bool fugiu)
     {
         switch (escolha)
         {
@@ -169,17 +169,35 @@ public class Program
 
             if (personagem.Velocidade > inimigo.Velocidade)
             {
-                acao(escolha, personagem, inimigo, personagemDefendendo, fugiu);
+                acao(escolha, personagem, inimigo, ref personagemDefendendo, ref fugiu);
 
-                int decisaoInimigo = rdnInimigo.Next(3) + 1;
-                acao(decisaoInimigo, inimigo, personagem, inimigoDefendendo, fugiu);
+                if (inimigo.Vida > 0)
+                {
+                    int decisaoInimigo = rdnInimigo.Next(3) + 1;
+                    acao(decisaoInimigo, inimigo, personagem, ref inimigoDefendendo, ref fugiu);
+                }
+                else
+                {
+                    Console.WriteLine($"{personagem.Nome} Ganhou!");
+                }
+
+
             }
             else if (personagem.Velocidade < inimigo.Velocidade)
             {
                 int decisaoInimigo = rdnInimigo.Next(3) + 1;
-                acao(decisaoInimigo, inimigo, personagem, inimigoDefendendo, fugiu);
+                acao(decisaoInimigo, inimigo, personagem, ref inimigoDefendendo, ref fugiu);
 
-                acao(escolha, personagem, inimigo, personagemDefendendo, fugiu);
+                if (personagem.Vida > 0)
+                {
+                    acao(escolha, personagem, inimigo, ref personagemDefendendo, ref fugiu);
+                }
+                else
+                {
+                    Console.WriteLine($"{inimigo.Nome} Ganhou!");
+                }
+
+
             }
             else
             {
@@ -188,23 +206,35 @@ public class Program
                 if (sorte == 0)
                 {
                     int decisaoInimigo = rdnInimigo.Next(3) + 1;
-                    acao(decisaoInimigo, inimigo, personagem, inimigoDefendendo, fugiu);
+                    acao(decisaoInimigo, inimigo, personagem, ref inimigoDefendendo, ref fugiu);
 
-                    acao(escolha, personagem, inimigo, personagemDefendendo, fugiu);
+                    if (personagem.Vida > 0)
+                    {
+                        acao(escolha, personagem, inimigo, ref personagemDefendendo, ref fugiu);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{inimigo.Nome} Ganhou!");
+                    }
+
                 }
                 else
                 {
-                    acao(escolha, personagem, inimigo, personagemDefendendo, fugiu);
+                    acao(escolha, personagem, inimigo, ref personagemDefendendo, ref fugiu);
 
-                    int decisaoInimigo = rdnInimigo.Next(3) + 1;
-                    acao(decisaoInimigo, inimigo, personagem, inimigoDefendendo, fugiu);
+                    if (inimigo.Vida > 0)
+                    {
+                        int decisaoInimigo = rdnInimigo.Next(3) + 1;
+                        acao(decisaoInimigo, inimigo, personagem, ref inimigoDefendendo, ref fugiu);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{personagem.Nome} Ganhou!");
+                    }
                 }
                 personagemDefendendo = false;
                 inimigoDefendendo = false;
             }
-
-
         }
-
     }
 }
