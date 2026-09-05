@@ -85,33 +85,63 @@ public class Program
         if (personagem.Ataque > inimigo.Defesa)
         {
             dano = personagem.Ataque;
-            inimigo.Vida -= dano;
         }
         else if (personagem.Ataque == inimigo.Defesa)
         {
             dano = Convert.ToInt32(personagem.Ataque / 1.2);
-            inimigo.Vida -= dano;
         }
         else
         {
             dano = Convert.ToInt32(personagem.Ataque / 1.8);
-            inimigo.Vida -= dano;
         }
-
-        Console.WriteLine();
-        Console.WriteLine($"Dano causado: {dano}");
-        Console.WriteLine();
-        MostrarPersonagem(personagem);
-        Console.WriteLine();
-        MostrarPersonagem(inimigo);
-        Console.WriteLine();
 
         return dano;
     }
 
-    static void Defesa(Personagem personagem, Personagem inimigo, int dano)
+    static void acao(int escolha, Personagem personagem, Personagem inimigo, bool defendendo, bool fugiu)
     {
+        switch (escolha)
+        {
+            case 1:
 
+                Console.WriteLine($"{personagem.Nome} Ataca!");
+                int dano = Ataque(personagem, inimigo);
+                if (defendendo == true)
+                {
+                    dano /= 3;
+                    inimigo.Vida -= dano;
+                }
+                else
+                {
+                    inimigo.Vida -= dano;
+                }
+                Console.WriteLine($"{personagem.Nome} atacou! Dano causado: {dano}");
+                break;
+
+            case 2:
+                defendendo = true;
+                Console.WriteLine($"{personagem.Nome} se prepara para defender");
+                break;
+            case 3:
+                if (personagem.Velocidade > inimigo.Velocidade)
+                {
+                    fugiu = true;
+                }
+                else
+                {
+                    Console.WriteLine($"{personagem.Nome} tenta fugir, sem sucesso");
+                }
+                break;
+            default:
+                Console.WriteLine("Operação invalida");
+                break;
+        }
+
+        Console.WriteLine("Resultado do turno: ");
+        Console.WriteLine();
+        MostrarPersonagem(personagem);
+        Console.WriteLine();
+        MostrarPersonagem(inimigo);
     }
 
     static void Batalha(Personagem personagem)
@@ -122,6 +152,8 @@ public class Program
         MostrarPersonagem(inimigo);
 
         bool fugiu = false;
+        bool personagemDefendendo = false;
+        bool inimigoDefendendo = false;
 
         Random rdnInimigo = new Random();
 
@@ -134,101 +166,43 @@ public class Program
             Console.WriteLine("3- Fugir");
             int escolha = int.Parse(Console.ReadLine());
 
-            if (personagem.Velocidade >= inimigo.Velocidade)
+
+            if (personagem.Velocidade > inimigo.Velocidade)
             {
-                switch (escolha) //decisão do personagem
-                {
-                    case 1:
-                        Ataque(personagem, inimigo);
-                        break;
-                    case 2:
-                        Defesa(personagem, inimigo, dano: 1); //deixa o dano aqui por enquanto
-                        break;
-                    case 3:
-                        Console.WriteLine("Você fugiu!");
-                        fugiu = true;
-                        break;
-                    default:
-                        Console.WriteLine("Operação invalida");
-                        break;
-                }
+                acao(escolha, personagem, inimigo, personagemDefendendo, fugiu);
 
-                //chama um numero aleatorio de 0 a 2
-                int decisaoInimigo = rdnInimigo.Next(3);
-
-                if (inimigo.Vida > 0)
-                {
-                    switch (decisaoInimigo)
-                    {
-                        case 0:
-                            Console.WriteLine("Seu inimigo ataca!");
-                            Console.WriteLine();
-                            Ataque(inimigo, personagem);
-                            break;
-                        case 1:
-                            Defesa(inimigo, personagem, dano: 1); //deixa o dano aqui por enquanto
-                            break;
-                        case 2:
-                            Console.WriteLine("Inimigo não consegue fugir");
-                            break;
-                        default:
-                            Console.WriteLine("Operação invalida");
-                            break;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Você Ganhou!");
-                }
+                int decisaoInimigo = rdnInimigo.Next(3) + 1;
+                acao(decisaoInimigo, inimigo, personagem, inimigoDefendendo, fugiu);
             }
             else if (personagem.Velocidade < inimigo.Velocidade)
             {
-                //chama um numero aleatorio de 0 a 2
-                int decisaoInimigo = rdnInimigo.Next(3);
+                int decisaoInimigo = rdnInimigo.Next(3) + 1;
+                acao(decisaoInimigo, inimigo, personagem, inimigoDefendendo, fugiu);
 
-                switch (decisaoInimigo)
+                acao(escolha, personagem, inimigo, personagemDefendendo, fugiu);
+            }
+            else
+            {
+                Random rdn = new Random();
+                int sorte = rdn.Next(2);
+                if (sorte == 0)
                 {
-                    case 0:
-                        Console.WriteLine("Seu inimigo ataca!");
-                        Console.WriteLine();
-                        Ataque(inimigo, personagem);
-                        break;
-                    case 1:
-                        Defesa(inimigo, personagem, dano: 1); //deixa o dano aqui por enquanto
-                        break;
-                    case 2:
-                        Console.WriteLine("Inimigo não consegue fugir");
-                        break;
-                    default:
-                        Console.WriteLine("Operação invalida");
-                        break;
-                }
+                    int decisaoInimigo = rdnInimigo.Next(3) + 1;
+                    acao(decisaoInimigo, inimigo, personagem, inimigoDefendendo, fugiu);
 
-                if (personagem.Vida > 0)
-                {
-                    switch (escolha)
-                    {
-                        case 1:
-                            Ataque(personagem, inimigo);
-                            break;
-                        case 2:
-                            Defesa(personagem, inimigo, dano: 1); //deixa o dano aqui por enquanto
-                            break;
-                        case 3:
-                            Console.WriteLine("Você não pode fugir!");
-
-                            break;
-                        default:
-                            Console.WriteLine("Operação invalida");
-                            break;
-                    }
+                    acao(escolha, personagem, inimigo, personagemDefendendo, fugiu);
                 }
                 else
                 {
-                    Console.WriteLine("Você perdeu!");
-                }
+                    acao(escolha, personagem, inimigo, personagemDefendendo, fugiu);
 
+                    int decisaoInimigo = rdnInimigo.Next(3) + 1;
+                    acao(decisaoInimigo, inimigo, personagem, inimigoDefendendo, fugiu);
+                }
+                personagemDefendendo = false;
+                inimigoDefendendo = false;
             }
+
 
         }
 
