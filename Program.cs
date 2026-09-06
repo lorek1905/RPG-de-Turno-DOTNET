@@ -49,11 +49,13 @@ public class Program
     }
     static void MostrarPersonagem(Personagem personagem)
     {
+        Console.WriteLine();
         Console.WriteLine($"Nome: {personagem.Nome}");
         Console.WriteLine($"Vida: {personagem.Vida}");
         Console.WriteLine($"Ataque: {personagem.Ataque}");
         Console.WriteLine($"Defesa: {personagem.Defesa}");
         Console.WriteLine($"Velocidade: {personagem.Velocidade}");
+        Console.WriteLine();
     }
 
     static List<Personagem> ListaDeInimigos = new List<Personagem>();
@@ -98,7 +100,10 @@ public class Program
         return dano;
     }
 
-    static void acao(int escolha, Personagem personagem, Personagem inimigo, ref bool defendendo, ref bool fugiu)
+    static void Acao(int escolha,
+    Personagem personagem,
+    Personagem inimigo,
+    ref bool fugiu)
     {
         switch (escolha)
         {
@@ -106,7 +111,7 @@ public class Program
 
                 Console.WriteLine($"{personagem.Nome} Ataca!");
                 int dano = Ataque(personagem, inimigo);
-                if (defendendo == true)
+                if (inimigo.Defendendo == true)
                 {
                     dano /= 3;
                     inimigo.Vida -= dano;
@@ -119,7 +124,7 @@ public class Program
                 break;
 
             case 2:
-                defendendo = true;
+                personagem.Defendendo = true;
                 Console.WriteLine($"{personagem.Nome} se prepara para defender");
                 break;
             case 3:
@@ -144,6 +149,89 @@ public class Program
         MostrarPersonagem(inimigo);
     }
 
+    static Personagem Primeiro(Personagem personagem, Personagem inimigo)
+    {
+        Personagem maisRapido;
+
+        if (personagem.Velocidade > inimigo.Velocidade)
+        {
+            maisRapido = personagem;
+        }
+        else if (inimigo.Velocidade > personagem.Velocidade)
+        {
+            maisRapido = inimigo;
+        }
+        else
+        {
+            Random rdn = new Random();
+            int sorte = rdn.Next(2);
+            if (sorte == 0)
+            {
+                maisRapido = personagem;
+            }
+            else
+            {
+                maisRapido = inimigo;
+            }
+        }
+        return maisRapido;
+    }
+
+    static Personagem Segundo(Personagem personagem, Personagem inimigo)
+    {
+        Personagem primeiro = Primeiro(personagem, inimigo);
+        Personagem segundo = null;
+        if (primeiro == personagem)
+        {
+            segundo = inimigo;
+            return segundo;
+        }
+        else
+        {
+            segundo = personagem;
+            return segundo;
+        }
+    }
+
+    static void Turno(Personagem personagem, Personagem inimigo, int escolha, ref bool fugiu)
+    {
+        Personagem primeiro = Primeiro(personagem, inimigo);
+        Personagem segundo = Segundo(personagem, inimigo);
+        Random rdnInimigo = new Random();
+
+        if (primeiro == inimigo)
+        {
+            int decisaoInimigo = rdnInimigo.Next(3) + 1;
+            Acao(decisaoInimigo, primeiro, segundo, ref fugiu);
+
+            if (personagem.Vida > 0)
+            {
+                Acao(escolha, segundo, primeiro, ref fugiu);
+            }
+            else
+            {
+                Console.WriteLine($"{inimigo.Nome} Ganhou!");
+            }
+        }
+        else
+        {
+            Acao(escolha, primeiro, segundo, ref fugiu);
+
+            if (inimigo.Vida > 0)
+            {
+                int decisaoInimigo = rdnInimigo.Next(3) + 1;
+                Acao(decisaoInimigo, segundo, primeiro, ref fugiu);
+            }
+            else
+            {
+                Console.WriteLine($"{personagem.Nome} Ganhou!");
+            }
+        }
+
+        personagem.Defendendo = false;
+        inimigo.Defendendo = false;
+    }
+
     static void Batalha(Personagem personagem)
     {
         Console.WriteLine("===== Batalha =====");
@@ -152,9 +240,6 @@ public class Program
         MostrarPersonagem(inimigo);
 
         bool fugiu = false;
-        bool personagemDefendendo = false;
-        bool inimigoDefendendo = false;
-
         Random rdnInimigo = new Random();
 
 
@@ -166,75 +251,8 @@ public class Program
             Console.WriteLine("3- Fugir");
             int escolha = int.Parse(Console.ReadLine());
 
+            Turno(personagem, inimigo, escolha, ref fugiu);
 
-            if (personagem.Velocidade > inimigo.Velocidade)
-            {
-                acao(escolha, personagem, inimigo, ref personagemDefendendo, ref fugiu);
-
-                if (inimigo.Vida > 0)
-                {
-                    int decisaoInimigo = rdnInimigo.Next(3) + 1;
-                    acao(decisaoInimigo, inimigo, personagem, ref inimigoDefendendo, ref fugiu);
-                }
-                else
-                {
-                    Console.WriteLine($"{personagem.Nome} Ganhou!");
-                }
-
-
-            }
-            else if (personagem.Velocidade < inimigo.Velocidade)
-            {
-                int decisaoInimigo = rdnInimigo.Next(3) + 1;
-                acao(decisaoInimigo, inimigo, personagem, ref inimigoDefendendo, ref fugiu);
-
-                if (personagem.Vida > 0)
-                {
-                    acao(escolha, personagem, inimigo, ref personagemDefendendo, ref fugiu);
-                }
-                else
-                {
-                    Console.WriteLine($"{inimigo.Nome} Ganhou!");
-                }
-
-
-            }
-            else
-            {
-                Random rdn = new Random();
-                int sorte = rdn.Next(2);
-                if (sorte == 0)
-                {
-                    int decisaoInimigo = rdnInimigo.Next(3) + 1;
-                    acao(decisaoInimigo, inimigo, personagem, ref inimigoDefendendo, ref fugiu);
-
-                    if (personagem.Vida > 0)
-                    {
-                        acao(escolha, personagem, inimigo, ref personagemDefendendo, ref fugiu);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"{inimigo.Nome} Ganhou!");
-                    }
-
-                }
-                else
-                {
-                    acao(escolha, personagem, inimigo, ref personagemDefendendo, ref fugiu);
-
-                    if (inimigo.Vida > 0)
-                    {
-                        int decisaoInimigo = rdnInimigo.Next(3) + 1;
-                        acao(decisaoInimigo, inimigo, personagem, ref inimigoDefendendo, ref fugiu);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"{personagem.Nome} Ganhou!");
-                    }
-                }
-                personagemDefendendo = false;
-                inimigoDefendendo = false;
-            }
         }
     }
 }

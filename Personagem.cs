@@ -6,6 +6,8 @@ public class Personagem
     public int Defesa { get; set; }
     public int Velocidade { get; set; }
 
+    public bool Defendendo { get; set; }
+
     public Personagem(string nome, int vida, int ataque, int defesa, int velocidade)
     {
         Nome = nome;
@@ -13,6 +15,8 @@ public class Personagem
         Ataque = ataque;
         Defesa = defesa;
         Velocidade = velocidade;
+        Defendendo = false;
+
     }
 }
 

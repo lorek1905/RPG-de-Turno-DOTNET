@@ -5,3 +5,72 @@ Sistema ==
 2 batalha por turnos com inimigos
 
 3 conta quantos rouds// batalhas sobreviveu
+
+//teste
+
+if (personagem.Velocidade > inimigo.Velocidade)
+            {
+                Acao(escolha, personagem, inimigo, ref fugiu);
+
+                if (inimigo.Vida > 0)
+                {
+                    int decisaoInimigo = rdnInimigo.Next(3) + 1;
+                    Acao(decisaoInimigo, inimigo, personagem, ref fugiu);
+                }
+                else
+                {
+                    Console.WriteLine($"{personagem.Nome} Ganhou!");
+                }
+
+
+            }
+            else if (personagem.Velocidade < inimigo.Velocidade)
+            {
+                int decisaoInimigo = rdnInimigo.Next(3) + 1;
+                Acao(decisaoInimigo, inimigo, personagem, ref fugiu);
+
+                if (personagem.Vida > 0)
+                {
+                    Acao(escolha, personagem, inimigo, ref fugiu);
+                }
+                else
+                {
+                    Console.WriteLine($"{inimigo.Nome} Ganhou!");
+                }
+
+
+            }
+            else
+            {
+                Random rdn = new Random();
+                int sorte = rdn.Next(2);
+                if (sorte == 0)
+                {
+                    int decisaoInimigo = rdnInimigo.Next(3) + 1;
+                    Acao(decisaoInimigo, inimigo, personagem, ref fugiu);
+
+                    if (personagem.Vida > 0)
+                    {
+                        Acao(escolha, personagem, inimigo, ref fugiu);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{inimigo.Nome} Ganhou!");
+                    }
+
+                }
+                else
+                {
+                    Acao(escolha, personagem, inimigo, ref fugiu);
+
+                    if (inimigo.Vida > 0)
+                    {
+                        int decisaoInimigo = rdnInimigo.Next(3) + 1;
+                        Acao(decisaoInimigo, inimigo, personagem, ref fugiu);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{personagem.Nome} Ganhou!");
+                    }
+                }
+            }
