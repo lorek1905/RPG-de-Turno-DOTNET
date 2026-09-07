@@ -177,10 +177,11 @@ public class Program
         return maisRapido;
     }
 
-    static Personagem Segundo(Personagem personagem, Personagem inimigo)
+    static Personagem Segundo(Personagem personagem, Personagem inimigo, Personagem primeiro)
     {
-        Personagem primeiro = Primeiro(personagem, inimigo);
+
         Personagem segundo = null;
+
         if (primeiro == personagem)
         {
             segundo = inimigo;
@@ -193,10 +194,13 @@ public class Program
         }
     }
 
-    static void Turno(Personagem personagem, Personagem inimigo, int escolha, ref bool fugiu)
+    static void Turno(Personagem personagem,
+    Personagem inimigo,
+    int escolha,
+    ref bool fugiu)
     {
         Personagem primeiro = Primeiro(personagem, inimigo);
-        Personagem segundo = Segundo(personagem, inimigo);
+        Personagem segundo = Segundo(personagem, inimigo, primeiro);
         Random rdnInimigo = new Random();
 
         if (primeiro == inimigo)
